@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "mchat-8b524": {
+      "hosting": {
+        "mchat": [
+          "mchat-8b524"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "mchat-8b524"
+  }
+}

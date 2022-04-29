@@ -1,0 +1,16 @@
+<p>home works!</p>
+
+<button class="button" (click)="auth.googleSigIn()">Login with Google</button>
+<button class="button" (click)="auth.signUserOut()">Sign Out</button>
+<button class="button" (click)="cs.create()">Create Chat</button>
+<div *ngIf="auth.user$ | async as user">
+  <pre>{{ user | json }}</pre>
+  <img src="{{ user.photoURL}}">
+</div>
+
+<button class="button" (click)="gU()">Get User</button>
+
+<div>
+  {{ prom?.email }}
+</div>
+
