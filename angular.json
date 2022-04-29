@@ -103,6 +103,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "mchat:build:production",
+            "firebaseProject": "mchat-8b524",
+            "firebaseHostingSite": "mchat-8b524"
+          }
         }
       }
     }
