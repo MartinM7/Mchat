@@ -1,16 +1,54 @@
-<p>home works!</p>
+<h1>Mchat</h1>
 
-<button class="button" (click)="auth.googleSigIn()">Login with Google</button>
-<button class="button" (click)="auth.signUserOut()">Sign Out</button>
-<button class="button" (click)="cs.create()">Create Chat</button>
-<div *ngIf="auth.user$ | async as user">
-  <pre>{{ user | json }}</pre>
-  <img src="{{ user.photoURL}}">
+<div class="login">
+  <div *ngIf="auth.user$ | async as user; else login">
+    <img [src]="user.photoURL" width="90px" alt="User Icon">
+    <p>
+      <span class="tag is-dark">{{ user.displayName }}</span>
+      <span class="tag is-light">{{ user.uid }}</span>
+    </p>
+
+    <button class="button is-small" (click)="auth.signUserOut()">Sign Out</button>
+    <hr>
+
+    <button class="button is-info" (click)="cs.create()">Create New Chat</button>
+
+    <hr>
+
+    <h3>My Chats</h3>
+
+    <ul>
+      <li *ngFor="let chat of userChats$ | async">
+        <a [routerLink]="'chats/' + chat.id">
+          {{ chat?.id }}
+        </a>
+      </li>
+    </ul>
+
+  </div>
+
+
+  <ng-template #login>
+    <button class="button" (click)="auth.googleSigIn()">Login with Google</button>
+  </ng-template>
+
 </div>
 
-<button class="button" (click)="gU()">Get User</button>
 
-<div>
-  {{ prom?.email }}
-</div>
+
+
+
+
+<!--<div *ngIf="auth.user$ | async as user">-->
+<!--  <pre>{{ user | json }}</pre>-->
+<!--  <img src="{{ user.photoURL}}">-->
+<!--</div>-->
+
+
+
+<!--<button class="button" (click)="gU()">Get User</button>-->
+
+<!--<div>-->
+<!--  {{ prom?.email }}-->
+<!--</div>-->
 

@@ -36,15 +36,14 @@ export class AuthService {
     )
   );
 
-
   }
   async googleSigIn() {
       const provider = new GoogleAuthProvider();
       const credential = await signInWithPopup(this.afAuth, provider);
-      const user = getAdditionalUserInfo(credential);
-      if (user) {
-        console.log(credential.user.email)
-      }
+      const user = getAdditionalUserInfo(credential); // test
+      if (user) {                                     // test
+        console.log(credential.user.email)            // test
+      }                                              // test
       return this.updateUserData(credential.user as User)
   }
 
