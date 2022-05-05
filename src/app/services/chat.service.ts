@@ -37,7 +37,7 @@ export class ChatService {
       query(
         collection(this.afs, 'chats', chatId, 'messages'),
         orderBy('createdAt'),limitToLast(10)
-      )
+      ),{ idField: 'msgId' }
     ) as Observable<Message[]>
   }
 
