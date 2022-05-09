@@ -33,6 +33,6 @@ export class ChatComponent implements OnInit {
   }
 
   private scrollBottom() {
-    setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 500)
+    setTimeout(() => window.scrollTo(0, document.body.scrollHeight ), 500)
   }
 }
