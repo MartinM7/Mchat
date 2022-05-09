@@ -12,7 +12,7 @@ import {Message} from "../services/message.model";
 })
 export class ChatComponent implements OnInit {
 
-  public chat$: Observable<Message[]> | undefined;
+  public chat$: Observable<Message[] | null> | undefined;
   chatId: string | null | undefined;
   newMsg = '';
   private loading = false;

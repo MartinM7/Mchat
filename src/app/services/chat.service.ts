@@ -1,26 +1,32 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {AuthService} from "./auth.service";
 import {
   addDoc,
   collection,
-  collectionChanges, collectionData,
-  collectionSnapshots, doc,
-  Firestore, limitToLast, orderBy,
-  query, setDoc,
+  collectionData,
+  collectionSnapshots,
+  doc, docData, docSnapshots,
+  Firestore,
+  getDoc,
+  limitToLast,
+  orderBy,
+  query,
+  setDoc,
   where
 } from "@angular/fire/firestore";
-import {map, Observable, switchMap} from "rxjs";
+import {from, map, Observable, of, subscribeOn, switchMap, tap} from "rxjs";
 import firebase from "firebase/compat";
-import User = firebase.User;
-import {Chat} from "./chat.model";
 import {Message} from "./message.model";
+import {log} from "util";
+import {Router} from "@angular/router";
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
 
-  constructor(private auth: AuthService, private afs: Firestore) { }
+  constructor(private auth: AuthService, private afs: Firestore, private router: Router) { }
 
   async create() {
     const { uid } = await this.auth.getUser()
@@ -33,12 +39,36 @@ export class ChatService {
   }
 
   get(chatId: any) {
-    return collectionData(
-      query(
-        collection(this.afs, 'chats', chatId, 'messages'),
-        orderBy('createdAt'),limitToLast(10)
-      ),{ idField: 'msgId' }
-    ) as Observable<Message[]>
+     const documentRef = doc(this.afs, 'chats', chatId)
+     // const docSnap = await getDoc(documentRef)
+
+    return docSnapshots(documentRef).pipe(
+      switchMap((doc) => {
+          if (doc.exists()) {
+            return collectionData(
+              query(
+                collection(documentRef, 'messages'),
+                orderBy('createdAt'), limitToLast(10)
+              ), {idField: 'msgId'}
+            ) as Observable<Message[]>
+          }
+          this.router.navigate(['/'])
+          return of(null)
+      }
+
+      )
+    )
+
+
+
+  }
+
+  async chatExists(id: string): Promise<boolean> {
+    const documentRef = doc(this.afs, 'chats', id)
+    const docSnap = await getDoc(documentRef)
+    console.log(docSnap.exists())
+    return docSnap.exists()
+
   }
 
   async addMessage(chatId: any, msg: string) {

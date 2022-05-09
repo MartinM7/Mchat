@@ -11,15 +11,15 @@
 
     <div class="chat">
 
-      <div class="msg animated zoomInUp" *ngFor="let msg of chat$ | async">
+      <div class="msg animated zoomInUp" *ngFor="let chat of chat$ | async">
 
         <div class="user">
-          <img [src]="msg.sender.photoURL || 'assets/user.svg'" alt="User Icon" width="50px">
-          <div><span class="tag is-dark">{{msg.sender.displayName}}</span></div>
+          <img [src]="chat.sender.photoURL || 'assets/user.svg'" alt="User Icon" width="50px">
+          <div><span class="tag is-dark">{{chat.sender.displayName}}</span></div>
 
         </div>
 
-        <p>{{msg.text}}</p>
+        <p>{{chat.text}}</p>
 
       </div>
 
