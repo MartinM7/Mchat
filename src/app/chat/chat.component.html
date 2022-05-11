@@ -1,25 +1,25 @@
 <ng-container *ngIf="chat$ | async as chat">
-  <ng-container *ngIf="auth.user$ | async as user">
+  <ng-container *ngIf="auth.user$ | async ">
 
     <div class="top">
       <p><a class="tag" routerLink="/">Back</a>
         <span class="tag is-success">
-          http://localhost:4200/chats/{{ chatId }}
+          {{ this.href }}
         </span>
       </p>
     </div>
 
     <div class="chat">
 
-      <div class="msg animated zoomInUp" *ngFor="let chat of chat$ | async">
+      <div class="msg animate__animated animate__zoomInUp" *ngFor="let msg of chat; trackBy: trackByCreated">
 
         <div class="user">
-          <img [src]="chat.sender.photoURL || 'assets/user.svg'" alt="User Icon" width="50px">
-          <div><span class="tag is-dark">{{chat.sender.displayName}}</span></div>
+          <img [src]="msg.sender.photoURL || 'assets/user.svg'" alt="User Icon" width="50px">
+          <div><span class="tag is-dark">{{msg.sender.displayName}}</span></div>
 
         </div>
 
-        <p>{{chat.text}}</p>
+        <p>{{msg.text}}</p>
 
       </div>
 
@@ -33,12 +33,3 @@
 
   </ng-container>
 </ng-container>
-
-<!--<div *ngFor="let message of chat$ | async">-->
-<!--  <a> {{ message.text }}{{ message.createdAt}} </a>-->
-<!--</div>-->
-
-<!--<div class="form">-->
-<!--  <input class="input" [(ngModel)]="newMsg" maxlength="100" (keydown.enter)="submit()">-->
-<!--  <button class="button" (click)=submit() [disabled]="!newMsg">Send</button>-->
-<!--</div>-->

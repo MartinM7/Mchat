@@ -16,12 +16,14 @@ export class ChatComponent implements OnInit {
   chatId: string | null | undefined;
   newMsg = '';
   private loading = false;
+  href = '';
 
   constructor(private route: ActivatedRoute, public auth: AuthService, public cs: ChatService) { }
 
   ngOnInit(): void {
     this.chatId = this.route.snapshot.paramMap.get('id')
     this.chat$ = this.cs.get(this.chatId)
+    this.href = window.location.href
   }
 
   async submit() {
@@ -30,6 +32,10 @@ export class ChatComponent implements OnInit {
     this.loading = false
     this.newMsg = ''
     this.scrollBottom()
+  }
+
+  trackByCreated(i: any, msg: { createdAt: any; }) {
+    return msg.createdAt;
   }
 
   private scrollBottom() {

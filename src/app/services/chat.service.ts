@@ -5,19 +5,16 @@ import {
   collection,
   collectionData,
   collectionSnapshots,
-  doc, docData, docSnapshots,
+  doc, docSnapshots,
   Firestore,
-  getDoc,
   limitToLast,
   orderBy,
   query,
   setDoc,
   where
 } from "@angular/fire/firestore";
-import {from, map, Observable, of, subscribeOn, switchMap, tap} from "rxjs";
-import firebase from "firebase/compat";
+import {map, Observable, of, switchMap} from "rxjs";
 import {Message} from "./message.model";
-import {log} from "util";
 import {Router} from "@angular/router";
 
 
@@ -38,9 +35,8 @@ export class ChatService {
     })
   }
 
-  get(chatId: any) {
-     const documentRef = doc(this.afs, 'chats', chatId)
-     // const docSnap = await getDoc(documentRef)
+  get(chatId: any): Observable<Message[] | null> {
+    const documentRef = doc(this.afs, 'chats', chatId)
 
     return docSnapshots(documentRef).pipe(
       switchMap((doc) => {
@@ -54,21 +50,9 @@ export class ChatService {
           }
           this.router.navigate(['/'])
           return of(null)
-      }
-
+        }
       )
     )
-
-
-
-  }
-
-  async chatExists(id: string): Promise<boolean> {
-    const documentRef = doc(this.afs, 'chats', id)
-    const docSnap = await getDoc(documentRef)
-    console.log(docSnap.exists())
-    return docSnap.exists()
-
   }
 
   async addMessage(chatId: any, msg: string) {
@@ -78,7 +62,6 @@ export class ChatService {
       createdAt: Date.now(),
       text: msg
     })
-
   }
 
   getUserChats() {
