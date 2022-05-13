@@ -28,6 +28,15 @@
     </div>
 
     <div class="form">
+
+      <button *ngIf="!recorder; else elseBlock" (click)="record()" class="button is-info">Record</button>
+
+      <ng-template #elseBlock>
+        <button (click)="stop()">Stop</button>
+      </ng-template>
+
+      <audio *ngIf="newAudio" [src]="newAudioURL()" controls></audio>
+
       <input class="input" [(ngModel)]="newMsg" maxlength="100" (keydown.enter)="submit()">
 
       <button (click)="submit()" class="button is-info" [disabled]="!newMsg">Send</button>

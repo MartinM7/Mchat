@@ -17,6 +17,8 @@ export class ChatComponent implements OnInit {
   newMsg = '';
   private loading = false;
   href = '';
+  newAudio: Blob | MediaSource | undefined | null;
+  recorder: MediaRecorder | undefined | null;
 
   constructor(private route: ActivatedRoute, public auth: AuthService, public cs: ChatService) { }
 
@@ -24,6 +26,7 @@ export class ChatComponent implements OnInit {
     this.chatId = this.route.snapshot.paramMap.get('id')
     this.chat$ = this.cs.get(this.chatId)
     this.href = window.location.href
+    this.newAudioURL()
   }
 
   async submit() {
@@ -40,5 +43,39 @@ export class ChatComponent implements OnInit {
 
   private scrollBottom() {
     setTimeout(() => window.scrollTo(0, document.body.scrollHeight ), 500)
+  }
+
+  newAudioURL() {
+    return URL.createObjectURL(this.newAudio as Blob | MediaSource)
+  }
+
+  async record() {
+    this.newAudio = null
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: false
+    })
+
+    const options = { mimeType: "audio/webm" }
+    const recordedChunks: BlobPart[] | undefined = []
+    this.recorder = new MediaRecorder(stream, options)
+
+    this.recorder.addEventListener("dataavailable", ev => {
+      if (ev.data.size > 0) {
+        recordedChunks.push(ev.data)
+      }
+    })
+
+    this.recorder.addEventListener("stop", () => {
+      this.newAudio = new Blob(recordedChunks)
+      console.log(this.newAudio)
+    })
+
+    this.recorder.start()
+  }
+
+  async stop() {
+    this.recorder?.stop()
+    this.recorder = null
   }
 }

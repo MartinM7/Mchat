@@ -60,7 +60,7 @@ export class ChatService {
     return setDoc(doc(this.afs, 'chats', chatId, 'messages', id), {
       sender: await this.auth.getUser(),
       createdAt: Date.now(),
-      text: msg
+      text: msg,
     })
   }
 
