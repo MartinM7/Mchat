@@ -1,3 +1,4 @@
+
 .chat {
   padding: 10px;
   margin: 70px auto 100px;
@@ -6,21 +7,48 @@
 
 .msg {
   display: flex;
+  //flex-direction: row-reverse;
   align-items: flex-start;
   margin-left: auto;
   order: 2;
   text-align: left;
+  //text-align: right
   border-bottom: 1px solid #e9e9e9;
   padding: 10px;
   width: 90vw;
   font-size: 1.3em;
   animation-delay: 0ms;
   animation-duration: 600ms;
+  //background-color: #dadada;
 
   .user {
     margin-right: 10px;
+    //margin-left: 10px;
     min-width: 100px;
     border-right: 1px solid #e9e9e9;
+    //border-left: 1px solid #e9e9e9;
+  }
+}
+
+.msg_owner {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-start;
+  margin-left: auto;
+  order: 2;
+  text-align: right;
+  border-bottom: 1px solid #e9e9e9;
+  padding: 10px;
+  width: 90vw;
+  font-size: 1.3em;
+  animation-delay: 0ms;
+  animation-duration: 600ms;
+  background-color: #fbf8fc;
+
+  .user {
+    margin-left: 10px;
+    min-width: 100px;
+    border-left: 1px solid #e9e9e9;
   }
 }
 
