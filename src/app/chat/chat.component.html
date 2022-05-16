@@ -21,6 +21,7 @@
 
         </div>
 
+        <audio *ngIf="msg.audioURL" [src]="msg.audioURL" controls></audio><br>
         <p>{{msg.text}}</p>
 
       </div>
@@ -32,7 +33,7 @@
       <button *ngIf="!recorder; else elseBlock" (click)="record()" class="button is-info">Record</button>
 
       <ng-template #elseBlock>
-        <button (click)="stop()">Stop</button>
+        <button class="button is-info" (click)="stop()">Stop</button>
       </ng-template>
 
       <audio *ngIf="newAudio" [src]="newAudioURL()" controls></audio>

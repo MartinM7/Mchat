@@ -13,6 +13,7 @@ import {
   setDoc,
   where
 } from "@angular/fire/firestore";
+import {getDownloadURL, ref, Storage, uploadBytesResumable} from "@angular/fire/storage";
 import {map, Observable, of, switchMap} from "rxjs";
 import {Message} from "./message.model";
 import {Router} from "@angular/router";
@@ -23,7 +24,9 @@ import {Router} from "@angular/router";
 })
 export class ChatService {
 
-  constructor(private auth: AuthService, private afs: Firestore, private router: Router) { }
+  audioURL: string | undefined;
+
+  constructor(private auth: AuthService, private afs: Firestore, private storage: Storage, private router: Router) { }
 
   async create() {
     const { uid } = await this.auth.getUser()
@@ -55,12 +58,18 @@ export class ChatService {
     )
   }
 
-  async addMessage(chatId: any, msg: string) {
+  async addMessage(chatId: any, msg: string, newAudio: any) {
     const id = doc(collection(this.afs, 'chats', chatId, 'messages')).id;
+    if (newAudio) {
+      const storageRef = ref(this.storage, `chats/${chatId}/${id}.wav`)
+      await uploadBytesResumable(storageRef, newAudio)
+      this.audioURL = await getDownloadURL(storageRef)
+    }
     return setDoc(doc(this.afs, 'chats', chatId, 'messages', id), {
       sender: await this.auth.getUser(),
       createdAt: Date.now(),
       text: msg,
+      audioURL: this.audioURL ?? null
     })
   }
 

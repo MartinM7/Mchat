@@ -4,6 +4,7 @@ import {AuthService} from "../services/auth.service";
 import {ChatService} from "../services/chat.service";
 import {Observable} from "rxjs";
 import {Message} from "../services/message.model";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-chat',
@@ -20,7 +21,7 @@ export class ChatComponent implements OnInit {
   newAudio: Blob | MediaSource | undefined | null;
   recorder: MediaRecorder | undefined | null;
 
-  constructor(private route: ActivatedRoute, public auth: AuthService, public cs: ChatService) { }
+  constructor(private route: ActivatedRoute, public auth: AuthService, public cs: ChatService, public sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
     this.chatId = this.route.snapshot.paramMap.get('id')
@@ -31,7 +32,8 @@ export class ChatComponent implements OnInit {
 
   async submit() {
     this.loading = true
-    await this.cs.addMessage(this.chatId, this.newMsg)
+    await this.cs.addMessage(this.chatId, this.newMsg, this.newAudio)
+    this.newAudio = null
     this.loading = false
     this.newMsg = ''
     this.scrollBottom()
@@ -46,7 +48,7 @@ export class ChatComponent implements OnInit {
   }
 
   newAudioURL() {
-    return URL.createObjectURL(this.newAudio as Blob | MediaSource)
+    return this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(this.newAudio as Blob | MediaSource))
   }
 
   async record() {
@@ -68,7 +70,6 @@ export class ChatComponent implements OnInit {
 
     this.recorder.addEventListener("stop", () => {
       this.newAudio = new Blob(recordedChunks)
-      console.log(this.newAudio)
     })
 
     this.recorder.start()

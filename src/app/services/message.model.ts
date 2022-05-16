@@ -5,4 +5,5 @@ export interface Message {
   createdAt: number,
   text: string,
   msgId: string
+  audioURL: string
 }
