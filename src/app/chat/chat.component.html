@@ -21,8 +21,12 @@
 
         </div>
 
-        <audio *ngIf="msg.audioURL" [src]="msg.audioURL" controls></audio><br>
-        <p>{{msg.text}}</p>
+        <div>
+          <p>{{msg.text}}</p>
+
+          <audio *ngIf="msg.audioURL" [src]="msg.audioURL" controls></audio><br>
+        </div>
+
 
       </div>
 
@@ -36,7 +40,10 @@
         <button class="button is-info" (click)="stop()">Stop</button>
       </ng-template>
 
-      <audio *ngIf="newAudio" [src]="newAudioURL()" controls></audio>
+      <ng-template *ngIf="newAudio">
+        <audio [src]="newAudioURL()" controls></audio>
+      </ng-template>
+
 
       <input class="input" [(ngModel)]="newMsg" maxlength="100" (keydown.enter)="submit()">
 
