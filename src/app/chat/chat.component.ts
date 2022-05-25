@@ -18,7 +18,7 @@ export class ChatComponent implements OnInit {
   newMsg = '';
   private loading = false;
   href = '';
-  newAudio: Blob | undefined | null;
+  newAudio: Blob | MediaSource | undefined | null;
   recorder: MediaRecorder | undefined | null;
 
   constructor(private route: ActivatedRoute, public auth: AuthService, public cs: ChatService, public sanitizer: DomSanitizer) { }
@@ -48,11 +48,7 @@ export class ChatComponent implements OnInit {
   }
 
   newAudioURL() {
-    if (this.newAudio) {
-      return this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(this.newAudio as Blob))
-    } else {
-      return
-    }
+    return this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(this.newAudio as Blob | MediaSource))
   }
 
   async record() {
