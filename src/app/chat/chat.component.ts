@@ -27,7 +27,7 @@ export class ChatComponent implements OnInit {
     this.chatId = this.route.snapshot.paramMap.get('id')
     this.chat$ = this.cs.get(this.chatId)
     this.href = window.location.href
-    this.newAudioURL()
+    // this.newAudioURL()
   }
 
   async submit() {
