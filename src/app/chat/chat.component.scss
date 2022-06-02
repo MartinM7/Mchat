@@ -1,4 +1,8 @@
 
+audio {
+  max-width: 200px;
+}
+
 .chat {
   padding: 10px;
   margin: 70px auto 100px;
@@ -43,7 +47,7 @@
   font-size: 1.3em;
   animation-delay: 0ms;
   animation-duration: 600ms;
-  background-color: #fbf8fc;
+  background-color: rgba(4, 37, 250, 0.04);
 
   .user {
     margin-left: 10px;
@@ -54,13 +58,35 @@
 
 .form {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 100px;
+  min-height: 100px;
   padding: 20px 10vw;
   background: rgba(255, 255, 255, 0.8);
+
+  div {
+    padding: 10px;
+  }
+}
+
+.submit {
+  display: flex;
+}
+
+.addAudio {
+  display: flex;
+  flex-direction: column;
+}
+
+.addImage {
+  display: flex;
+  flex-direction: column;
 }
 
 .top {

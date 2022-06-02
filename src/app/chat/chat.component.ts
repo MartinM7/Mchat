@@ -32,6 +32,11 @@ export class ChatComponent implements OnInit {
   }
 
   async submit() {
+
+    if (!this.newMsg && !this.newAudio && !this.imageUrl) {
+      return alert("You can't send a empty message!" )
+    }
+
     this.loading = true
     console.log("Before", this.newMsg, this.imageUrl, this.imageFile)
     await this.cs.addMessage(this.chatId, this.newMsg, this.newAudio, this.imageFile)
@@ -58,26 +63,32 @@ export class ChatComponent implements OnInit {
 
   async record() {
     this.newAudio = null
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: false
-    })
 
-    const options = { mimeType: "audio/webm" }
-    const recordedChunks: BlobPart[] | undefined = []
-    this.recorder = new MediaRecorder(stream, options)
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: false
+      })
 
-    this.recorder.addEventListener("dataavailable", ev => {
-      if (ev.data.size > 0) {
-        recordedChunks.push(ev.data)
-      }
-    })
+      const options = { mimeType: "audio/webm" }
+      const recordedChunks: BlobPart[] | undefined = []
+      this.recorder = new MediaRecorder(stream, options)
 
-    this.recorder.addEventListener("stop", () => {
-      this.newAudio = new Blob(recordedChunks)
-    })
+      this.recorder.addEventListener("dataavailable", ev => {
+        if (ev.data.size > 0) {
+          recordedChunks.push(ev.data)
+        }
+      })
 
-    this.recorder.start()
+      this.recorder.addEventListener("stop", () => {
+        this.newAudio = new Blob(recordedChunks)
+      })
+
+      this.recorder.start()
+    } catch (err) {
+      alert('An Audio recording device could not be found!')
+    }
+
   }
 
   stop() {
