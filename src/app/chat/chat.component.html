@@ -21,32 +21,42 @@
 
         </div>
 
-        <audio *ngIf="msg.audioURL" [src]="msg.audioURL" controls></audio><br>
-        <p>{{msg.text}}</p>
+        <div>
+          <a *ngIf="msg.imageURL" [href]="msg.imageURL"><img [src]="msg.imageURL" alt="Image" width="200"></a>
+          <audio *ngIf="msg.audioURL" [src]="msg.audioURL" controls></audio><br>
+          <p>{{msg.text}}</p>
+        </div>
+
 
       </div>
 
     </div>
 
     <div class="form">
+      <div>
+        <input type="file" accept="image/*" (change)="onselectImage($event)" hidden #addImage>
 
-      <input type="file" (change)="onselectImage($event)" hidden #addImage>
+        <button class="button is-info" (click)="addImage.click()">Add Image</button>
 
-      <button class="button is-info" (click)="addImage.click()">Add Image</button>
+        <img *ngIf="imageUrl" alt="Image Preview" [src]="imageUrl" (click)="imageUrl = null" width="150">
+      </div>
 
-      <img [src]="imageUrl" (click)="imageUrl = null">
+      <div>
+        <button *ngIf="!recorder; else elseBlock" (click)="record()" class="button is-info">Record Audio</button>
 
-      <button *ngIf="!recorder; else elseBlock" (click)="record()" class="button is-info">Record Audio</button>
+        <ng-template #elseBlock>
+          <button class="button is-info" (click)="stop()">Stop</button>
+        </ng-template>
 
-      <ng-template #elseBlock>
-        <button class="button is-info" (click)="stop()">Stop</button>
-      </ng-template>
+        <audio *ngIf="newAudio" [src]="newAudioURL()" controls></audio>
+      </div>
 
-      <audio *ngIf="newAudio" [src]="newAudioURL()" controls></audio>
+      <div>
+        <input class="input" [(ngModel)]="newMsg" maxlength="100" (keydown.enter)="submit()">
 
-      <input class="input" [(ngModel)]="newMsg" maxlength="100" (keydown.enter)="submit()">
+        <button (click)="submit()" class="button is-info" [disabled]="!newMsg">Send</button>
+      </div>
 
-      <button (click)="submit()" class="button is-info" [disabled]="!newMsg">Send</button>
     </div>
 
   </ng-container>

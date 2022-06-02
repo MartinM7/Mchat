@@ -24,7 +24,8 @@ import {Router} from "@angular/router";
 })
 export class ChatService {
 
-  audioURL: string | undefined;
+  audioURL: string | undefined | null;
+  imageURL: string | undefined | null;
 
   constructor(private auth: AuthService, private afs: Firestore, private storage: Storage, private router: Router) { }
 
@@ -58,18 +59,34 @@ export class ChatService {
     )
   }
 
-  async addMessage(chatId: any, msg: string, newAudio: any) {
-    const id = doc(collection(this.afs, 'chats', chatId, 'messages')).id;
+  async addMessage(chatId: any, msg: string, newAudio: any, imageFile: any) {
+
+    this.audioURL = null
+    this.imageURL = null
+
+    const id = doc(collection(this.afs, 'chats', chatId, 'messages')).id
+
     if (newAudio) {
+
       const storageRef = ref(this.storage, `chats/${chatId}/${id}.wav`)
       await uploadBytesResumable(storageRef, newAudio)
       this.audioURL = await getDownloadURL(storageRef)
+
+    }
+    if (imageFile) {
+
+      const ext = imageFile.name.split('.')
+      const storageRef = ref(this.storage, `chats/${chatId}/${id}.${ext}`)
+      await uploadBytesResumable(storageRef, imageFile)
+      this.imageURL = await getDownloadURL(storageRef)
+
     }
     return setDoc(doc(this.afs, 'chats', chatId, 'messages', id), {
       sender: await this.auth.getUser(),
       createdAt: Date.now(),
       text: msg,
-      audioURL: this.audioURL ?? null
+      audioURL: this.audioURL ?? null,
+      imageURL: this.imageURL ?? null
     })
   }
 

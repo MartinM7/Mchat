@@ -21,6 +21,7 @@ export class ChatComponent implements OnInit {
   newAudio: Blob | undefined | null;
   recorder: MediaRecorder | undefined | null;
   imageUrl: string | null | undefined;
+  imageFile: File | null | undefined;
 
   constructor(private route: ActivatedRoute, public auth: AuthService, public cs: ChatService, public sanitizer: DomSanitizer) { }
 
@@ -28,16 +29,19 @@ export class ChatComponent implements OnInit {
     this.chatId = this.route.snapshot.paramMap.get('id')
     this.chat$ = this.cs.get(this.chatId)
     this.href = window.location.href
-    // this.newAudioURL()
   }
 
   async submit() {
     this.loading = true
-    await this.cs.addMessage(this.chatId, this.newMsg, this.newAudio)
+    console.log("Before", this.newMsg, this.imageUrl, this.imageFile)
+    await this.cs.addMessage(this.chatId, this.newMsg, this.newAudio, this.imageFile)
     this.newAudio = null
     this.loading = false
     this.newMsg = ''
+    this.imageUrl = null
+    this.imageFile = null
     this.scrollBottom()
+    console.log("After", this.newMsg, this.imageUrl, this.imageFile)
   }
 
   trackByCreated(i: any, msg: { createdAt: any; }) {
@@ -85,6 +89,8 @@ export class ChatComponent implements OnInit {
   onselectImage($event: any) {
     const file: File = $event.target.files[0]
     if (file) {
+      this.imageFile = file
+      console.log(file.name, file.type)  // testing
       const reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = () => {
