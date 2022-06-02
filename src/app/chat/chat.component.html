@@ -30,7 +30,13 @@
 
     <div class="form">
 
-      <button *ngIf="!recorder; else elseBlock" (click)="record()" class="button is-info">Record</button>
+      <input type="file" (change)="onselectImage($event)" hidden #addImage>
+
+      <button class="button is-info" (click)="addImage.click()">Add Image</button>
+
+      <img [src]="imageUrl" (click)="imageUrl = null">
+
+      <button *ngIf="!recorder; else elseBlock" (click)="record()" class="button is-info">Record Audio</button>
 
       <ng-template #elseBlock>
         <button class="button is-info" (click)="stop()">Stop</button>

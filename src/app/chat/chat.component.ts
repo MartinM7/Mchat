@@ -18,8 +18,9 @@ export class ChatComponent implements OnInit {
   newMsg = '';
   private loading = false;
   href = '';
-  newAudio: Blob | MediaSource | undefined | null;
+  newAudio: Blob | undefined | null;
   recorder: MediaRecorder | undefined | null;
+  imageUrl: string | null | undefined;
 
   constructor(private route: ActivatedRoute, public auth: AuthService, public cs: ChatService, public sanitizer: DomSanitizer) { }
 
@@ -48,7 +49,7 @@ export class ChatComponent implements OnInit {
   }
 
   newAudioURL() {
-    return this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(this.newAudio as Blob | MediaSource))
+    return this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(this.newAudio as Blob ))
   }
 
   async record() {
@@ -75,8 +76,21 @@ export class ChatComponent implements OnInit {
     this.recorder.start()
   }
 
-  async stop() {
+  stop() {
     this.recorder?.stop()
     this.recorder = null
   }
+
+
+  onselectImage($event: any) {
+    const file: File = $event.target.files[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => {
+        this.imageUrl = reader.result as string
+      }
+    }
+  }
+
 }
