@@ -22,6 +22,8 @@ export class ChatComponent implements OnInit {
   recorder: MediaRecorder | undefined | null;
   imageUrl: string | null | undefined;
   imageFile: File | null | undefined;
+  showModal: boolean = false;
+  modalImage: any;
 
   constructor(private route: ActivatedRoute, public auth: AuthService, public cs: ChatService, public sanitizer: DomSanitizer) { }
 
@@ -38,7 +40,6 @@ export class ChatComponent implements OnInit {
     }
 
     this.loading = true
-    console.log("Before", this.newMsg, this.imageUrl, this.imageFile)
     await this.cs.addMessage(this.chatId as string, this.newMsg, this.newAudio, this.imageFile)
     this.newAudio = null
     this.loading = false
@@ -46,7 +47,6 @@ export class ChatComponent implements OnInit {
     this.imageUrl = null
     this.imageFile = null
     this.scrollBottom()
-    console.log("After", this.newMsg, this.imageUrl, this.imageFile)
   }
 
   trackByCreated(i: any, msg: { createdAt: any; }) {
@@ -110,4 +110,8 @@ export class ChatComponent implements OnInit {
     }
   }
 
+  selectedImage($event: any) {
+    this.showModal = true
+    this.modalImage = $event.target.src
+  }
 }

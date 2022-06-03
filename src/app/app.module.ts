@@ -12,6 +12,7 @@ import { ChatComponent } from './chat/chat.component';
 import { HomeComponent } from './home/home.component';
 import {FormsModule} from "@angular/forms";
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
+import {ModalComponent} from "./modal/modal.component";
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.compo
     ChatComponent,
     HomeComponent,
     LoadingSpinnerComponent,
+    ModalComponent
   ],
     imports: [
         BrowserModule,
