@@ -14,9 +14,9 @@ import {DomSanitizer} from "@angular/platform-browser";
 export class ChatComponent implements OnInit {
 
   public chat$: Observable<Message[] | null> | undefined;
-  chatId: string | null | undefined;
+  chatId: string | null = '';
   newMsg = '';
-  private loading = false;
+  loading = false;
   href = '';
   newAudio: Blob | undefined | null;
   recorder: MediaRecorder | undefined | null;
@@ -39,7 +39,7 @@ export class ChatComponent implements OnInit {
 
     this.loading = true
     console.log("Before", this.newMsg, this.imageUrl, this.imageFile)
-    await this.cs.addMessage(this.chatId, this.newMsg, this.newAudio, this.imageFile)
+    await this.cs.addMessage(this.chatId as string, this.newMsg, this.newAudio, this.imageFile)
     this.newAudio = null
     this.loading = false
     this.newMsg = ''

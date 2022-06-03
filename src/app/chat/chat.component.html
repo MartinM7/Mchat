@@ -1,6 +1,10 @@
 <ng-container *ngIf="chat$ | async as chat">
   <ng-container *ngIf="auth.user$ | async as user">
 
+    <div *ngIf="loading">
+      <app-loading-spinner ></app-loading-spinner>
+    </div>
+
     <div class="top">
       <p><a class="tag" routerLink="/">Back</a>
         <span class="tag is-success">

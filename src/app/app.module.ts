@@ -11,12 +11,14 @@ import { provideStorage,getStorage } from '@angular/fire/storage';
 import { ChatComponent } from './chat/chat.component';
 import { HomeComponent } from './home/home.component';
 import {FormsModule} from "@angular/forms";
+import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatComponent,
     HomeComponent,
+    LoadingSpinnerComponent,
   ],
     imports: [
         BrowserModule,

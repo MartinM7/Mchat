@@ -59,7 +59,7 @@ export class ChatService {
     )
   }
 
-  async addMessage(chatId: any, msg: string, newAudio: any, imageFile: any) {
+  async addMessage(chatId: string, msg: string, newAudio: Blob | null | undefined, imageFile: File | null | undefined) {
 
     this.audioURL = null
     this.imageURL = null
