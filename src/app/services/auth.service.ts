@@ -3,7 +3,6 @@ import {firstValueFrom, Observable, of, switchMap} from "rxjs";
 import {Router} from "@angular/router";
 import {
   Auth,
-  getAdditionalUserInfo,
   GoogleAuthProvider,
   signInWithPopup, signOut,
   user
@@ -37,13 +36,10 @@ export class AuthService {
   );
 
   }
+
   async googleSigIn() {
       const provider = new GoogleAuthProvider();
       const credential = await signInWithPopup(this.afAuth, provider);
-      const user = getAdditionalUserInfo(credential); // test
-      if (user) {                                     // test
-        console.log(credential.user.email)            // test
-      }                                              // test
       return this.updateUserData(credential.user as User)
   }
 
@@ -54,10 +50,11 @@ export class AuthService {
         uid,
         email,
         displayName,
-        photoURL
+        photoURL,
        };
 
       return setDoc(documentRef, data, { merge: true})
+
   }
 
   getUser() {

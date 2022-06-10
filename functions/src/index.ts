@@ -1,3 +1,3 @@
-export {messageCount, chatCount} from "./firestore";
+export {addCountersToUserDocument, messageCount, chatCount} from "./firestore";
 
 

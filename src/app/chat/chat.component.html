@@ -40,7 +40,7 @@
 
     <div class="form">
       <div class="addImage">
-        <img class="mb-5" *ngIf="imageUrl" alt="Image Preview" [src]="imageUrl" (click)="imageUrl = null" width="150">
+        <img class="mb-5" *ngIf="imageUrl" alt="Image Preview" [src]="imageUrl" (click)="removeImage()" width="150">
 
         <input type="file" accept="image/*" (change)="onselectImage($event)" hidden #addImage>
 

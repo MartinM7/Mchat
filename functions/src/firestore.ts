@@ -1,8 +1,22 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
+
 admin.initializeApp();
 const db = admin.firestore();
+
+export const addCountersToUserDocument = functions.firestore
+    .document("users/{user}")
+    .onCreate( async (snapshot) => {
+      const documentId = snapshot.id;
+
+      const userRef = db.doc(`users/${documentId}`);
+
+      await userRef.update({
+        chatCount: 0,
+        messageCount: 0,
+      });
+    });
 
 export const messageCount = functions.firestore
     .document("chats/{chat}/messages/{message}")
@@ -11,18 +25,9 @@ export const messageCount = functions.firestore
 
       const userRef = db.doc(`users/${data.sender.uid}`);
 
-      const userSnap = await userRef.get();
-      const userData = userSnap.data();
-
-      if (userData?.messageCount) {
-        return userRef.update({
-          messageCount: userData?.messageCount + 1,
-        });
-      }
-
-      return userRef.update({
-        messageCount: 1,
-      });
+      await userRef.update(
+          {messageCount: admin.firestore.FieldValue.increment(1)}
+      );
     });
 
 export const chatCount = functions.firestore
@@ -32,16 +37,7 @@ export const chatCount = functions.firestore
 
       const userRef = db.doc(`users/${data.owner}`);
 
-      const userSnap = await userRef.get();
-      const userData = userSnap.data();
-
-      if (userData?.chatCount) {
-        return userRef.update({
-          chatCount: userData?.chatCount + 1,
-        });
-      }
-
-      return userRef.update({
-        chatCount: 1,
-      });
+      await userRef.update(
+          {chatCount: admin.firestore.FieldValue.increment(1)}
+      );
     });

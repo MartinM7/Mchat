@@ -114,4 +114,9 @@ export class ChatComponent implements OnInit {
     this.showModal = true
     this.modalImage = $event.target.src
   }
+
+  removeImage() {
+    this.imageUrl = null
+    this.imageFile = null
+  }
 }

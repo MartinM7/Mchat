@@ -36,7 +36,7 @@ export class ChatService {
       createdAt: Date.now(),
       owner: uid,
       members: [uid]
-    })
+    }).catch(() => alert('You can only create a limited number of chats!'))
   }
 
   get(chatId: any): Observable<Message[] | null> {
@@ -87,7 +87,7 @@ export class ChatService {
       text: msg,
       audioURL: this.audioURL ?? null,
       imageURL: this.imageURL ?? null
-    })
+    }).catch(() => alert('You can only create a limited number of messages!'))
   }
 
   getUserChats() {
