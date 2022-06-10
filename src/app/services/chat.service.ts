@@ -69,16 +69,24 @@ export class ChatService {
     if (newAudio) {
 
       const storageRef = ref(this.storage, `chats/${chatId}/${id}.wav`)
-      await uploadBytesResumable(storageRef, newAudio)
-      this.audioURL = await getDownloadURL(storageRef)
+      try {
+        await uploadBytesResumable(storageRef, newAudio)
+        this.audioURL = await getDownloadURL(storageRef)
+      } catch (e) {
+        alert('You can only upload audio recordings smaller than 1 MB')
+      }
 
     }
     if (imageFile) {
 
-      const ext = imageFile.name.split('.')
-      const storageRef = ref(this.storage, `chats/${chatId}/${id}.${ext}`)
-      await uploadBytesResumable(storageRef, imageFile)
-      this.imageURL = await getDownloadURL(storageRef)
+      const extension = imageFile.name.split('.')
+      const storageRef = ref(this.storage, `chats/${chatId}/${id}.${extension}`)
+      try {
+        await uploadBytesResumable(storageRef, imageFile)
+        this.imageURL = await getDownloadURL(storageRef)
+      } catch (e) {
+        alert('You can only upload images smaller than 1 MB')
+      }
 
     }
     return setDoc(doc(this.afs, 'chats', chatId, 'messages', id), {
@@ -99,8 +107,8 @@ export class ChatService {
             where('owner', '==', user?.uid)
           )
         ).pipe(
-          map(actions => {
-            return actions.map(a => {
+          map(snaps => {
+            return snaps.map(a => {
               const data: Object = a.data()
               const id = a.id
               return {id, ...data}
