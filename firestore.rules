@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+  
+    match /chats/{chat} {
+      allow read: if request.auth.uid != null;
+    	allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.chatCount <= 3;
+     
+     match /messages/{message} {
+     	 allow read: if request.auth.uid != null;
+       allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.messageCount <= 30;
+     }
+    }    
+    
+    match /users/{document=**} {
+      allow read: if request.auth.uid != null;
+      
+    }
+  }
+}
