@@ -1,21 +1,24 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-  
-  
+
+
     match /chats/{chat} {
       allow read: if request.auth.uid != null;
     	allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.chatCount <= 3;
-     
+
      match /messages/{message} {
      	 allow read: if request.auth.uid != null;
        allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.messageCount <= 30;
      }
-    }    
-    
-    match /users/{document=**} {
+    }
+
+    match /users/{user} {
       allow read: if request.auth.uid != null;
-      
+      allow create: if (!request.resource.data.keys().hasAny(
+        ['chatCount', 'messageCount'])) && request.auth.uid != null;
+      allow update: if (request.resource.data.diff(resource.data).affectedKeys()
+        .hasOnly(['uid', 'email', 'displayName', 'photoURL'])) && request.auth.uid != null;
     }
   }
 }

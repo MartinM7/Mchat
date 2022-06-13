@@ -101,7 +101,6 @@ export class ChatComponent implements OnInit {
     const file: File = $event.target.files[0]
     if (file) {
       this.imageFile = file
-      console.log(file.name, file.type)  // testing
       const reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = () => {
