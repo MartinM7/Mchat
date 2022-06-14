@@ -5,7 +5,6 @@
     <img [src]="user.photoURL" width="90px" alt="User Icon">
     <p>
       <span class="tag is-dark">{{ user.displayName }}</span>
-      <span class="tag is-light">{{ user.uid }}</span>
     </p>
 
     <button class="button is-small" (click)="auth.signUserOut()">Sign Out</button>
